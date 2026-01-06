@@ -1,5 +1,12 @@
 # Coastal Flood Simulation System
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Julia](https://img.shields.io/badge/Julia-1.10+-purple.svg)](https://julialang.org/)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![GitHub Stars](https://img.shields.io/github/stars/randsley/coastal-flood-modeling?style=social)](https://github.com/randsley/coastal-flood-modeling/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/randsley/coastal-flood-modeling)](https://github.com/randsley/coastal-flood-modeling/issues)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.XXXXX-blue)](https://github.com/randsley/coastal-flood-modeling)
+
 High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território).
 
 ## Overview
