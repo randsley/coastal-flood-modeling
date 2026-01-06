@@ -1,0 +1,54 @@
+# Large DEM Data Files (too large for GitHub)
+DEM/
+DEM2m/
+MDS05m/
+*.tif
+*.vrt
+
+# Output Files
+tiles_output/
+*.html
+*.png
+*.log
+
+# Temporary Files
+*.tmp
+/tmp/
+
+# Julia
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/deps.jl
+Manifest.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# macOS metadata files
+._*
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Backup files
+*.bak
+*.backup
