@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "Coastal Flood Simulation System"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - family-names: "Randsley"
+    given-names: "Nigel"
+    email: "nigel.randsley@protonmail.com"
+repository-code: "https://github.com/randsley/coastal-flood-modeling"
+url: "https://github.com/randsley/coastal-flood-modeling"
+abstract: "High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT. Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level scenarios."
+keywords:
+  - coastal flooding
+  - flood modeling
+  - GIS
+  - digital elevation model
+  - morphological reconstruction
+  - sea level rise
+  - Portugal
+  - Julia
+  - Python
+license: MIT
+version: 1.0.0
+date-released: "2026-01-06"
