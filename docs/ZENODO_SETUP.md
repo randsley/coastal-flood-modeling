@@ -252,19 +252,34 @@ This research used the Coastal Flood Simulation System (Randsley, 2026) availabl
 
 ## Zenodo Communities
 
-Consider adding your software to relevant Zenodo communities for better discoverability:
+Adding your software to relevant Zenodo communities significantly increases discoverability and citations.
 
-### Suggested Communities:
-- **Earth Sciences**
-- **Climate and Weather**
-- **GIS and Remote Sensing**
-- **Open Source Software**
+### 🎯 Top Recommended Communities for This Project:
+1. **Climate and Weather** - Climate adaptation, sea level rise
+2. **Earth System Science** - Coastal processes, DEM analysis
+3. **Natural Hazards** - Flood modeling, hazard assessment
+4. **Coastal Research** - Directly related to coastal zones
+5. **GIS and Geospatial** - Raster processing, spatial analysis
+6. **Open Source Geospatial (OSGeo)** - Uses GDAL, open-source GIS
+7. **Hydrology** - Hydrological connectivity, flooding
 
-To join a community:
+### 📖 Complete Communities Guide
+
+For detailed instructions on:
+- How to submit to communities
+- List of 13+ relevant communities
+- Tips for successful acceptance
+- Community networking opportunities
+
+**See**: [`docs/ZENODO_COMMUNITIES.md`](ZENODO_COMMUNITIES.md)
+
+### Quick Steps to Join Communities
+
 1. Go to your Zenodo record
 2. Click "Edit"
 3. Scroll to "Communities"
-4. Search and request to join relevant communities
+4. Search and add communities (can add multiple)
+5. Save and wait for curator approval (1-14 days)
 
 ## ORCID Integration
 
