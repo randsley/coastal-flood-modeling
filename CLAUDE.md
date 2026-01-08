@@ -16,8 +16,10 @@ This is a coastal flood simulation system for Portuguese coastal zones using hig
    - Reprojects from Portuguese grid to WGS84 (EPSG:4326) for web visualization
 
 2. **Flood Simulation** (Multiple implementations):
-   - **Python**: `Simul_corrected.py` - Main production version
+   - **Python**: `Simul_corrected.py` - Main production version with full feature parity
+   - **Python Tiled**: `Simul_tiled.py` - For large coastal regions
    - **Julia**: `simul_flood.jl` - High-performance alternative
+   - **Julia Tiled**: `simul_flood_tiled.jl` - For large coastal regions
    - Uses morphological reconstruction (erosion method) for hydrologically-connected flooding
 
 ### Critical Domain Knowledge
@@ -65,17 +67,22 @@ Outputs:
 
 For large regions like Caminha to Aveiro (~150 km), use the tiled approach:
 
+**Python Tiled Version:**
+```bash
+python Simul_tiled.py
+```
+
 **Julia Tiled Version:**
 ```bash
 julia simul_flood_tiled.jl
 ```
 
-This automatically:
-1. Divides region into manageable tiles (0.15° ≈ 16.5 km each)
-2. Processes each tile with proper overlap for flood connectivity
-3. Generates individual GeoTIFFs and HTML maps per tile
-4. Creates merged VRT for QGIS viewing
-5. Calculates total flooded area across all tiles
+Both implementations automatically:
+1. Divide region into manageable tiles (0.15° ≈ 16.5 km each)
+2. Process each tile with proper overlap for flood connectivity
+3. Generate individual GeoTIFFs and HTML maps per tile
+4. Create merged VRT for QGIS viewing
+5. Calculate total flooded area across all tiles
 
 **Key Feature**: 500m overlap between tiles ensures hydrological connectivity for coastal flooding.
 
@@ -130,17 +137,29 @@ Flooded area: 2.145 km² (2,145,367 m²)
 
 ### Python vs Julia Differences
 
+**Both implementations now have feature parity** with the following outputs:
+- GeoTIFF files for QGIS/ArcGIS
+- Interactive HTML maps with pixel-perfect flood overlay
+- Metadata dictionary with simulation statistics
+- Tiling support for large regions
+- VRT merging for combined outputs
+
 **Python (Simul_corrected.py):**
 - Uses `rasterio` for GDAL access
 - `skimage.morphology.reconstruction` for flooding
-- `folium` for web-based visualization
-- Returns HTML maps directly viewable in browser
+- Leaflet.js HTML maps with OpenStreetMap/Satellite basemap
+- **Pixel-perfect flood overlay** (if Pillow installed)
+  - Without Pillow: HTML maps use rectangle approximation
+  - With Pillow: HTML maps show exact pixel-level flood data via PNG embedding
+- Returns flood_mask, transform, metadata dictionary
 
 **Julia (simul_flood.jl):**
 - Uses `Rasters.jl` with `ArchGDAL` backend
 - `ImageMorphology.mreconstruct` for flooding
-- `GLMakie` for interactive visualization (preserves spatial context)
-- Outputs GeoTIFF for GIS software integration
+- Leaflet.js HTML maps with OpenStreetMap/Satellite basemap
+- **Pixel-perfect flood overlay** (if FileIO/ImageIO installed)
+- Optional `GLMakie` for interactive visualization (preserves spatial context)
+- Returns Raster object, transform, metadata dictionary
 - Plotting properly handles Raster coordinates (pixel centers)
 
 ### Array Dimension Handling
@@ -158,15 +177,19 @@ Edge seeding requires interior masking:
 ## Dependencies
 
 **Python:**
-- rasterio, numpy, folium
-- shapely, scikit-image
-- GDAL/osgeo (for VRT building)
+- **Required**: rasterio, numpy, shapely, scikit-image, base64
+- **Optional** (for pixel-perfect HTML maps): Pillow (PIL)
+  - Without Pillow: HTML maps use rectangle approximation
+  - With Pillow: HTML maps show exact pixel-level flood data via PNG embedding
+  - Install with: `pip install Pillow`
+- **Optional** (for VRT merging): GDAL Python bindings (osgeo)
+  - Can also use command-line GDAL tools
 
 **Julia:**
 - **Required**: Rasters.jl, ArchGDAL.jl, ImageMorphology.jl, Statistics, Base64
 - **Optional** (for pixel-perfect HTML maps): FileIO.jl, ImageIO.jl, ColorTypes.jl
   - Without these: HTML maps use rectangle approximation
-  - With these: HTML maps show exact pixel-level flood data
+  - With these: HTML maps show exact pixel-level flood data via PNG embedding
 - **Optional** (for interactive plotting): GLMakie.jl
 - **Optional** (for map tile backgrounds): Tyler.jl
 
@@ -181,21 +204,24 @@ Edge seeding requires interior masking:
 
 ### Visualization Notes
 
-**Python**: Generates HTML with Folium (interactive web map)
-- Overlay on Google Satellite imagery
+**Both Python and Julia** now generate the same output formats:
+
+**HTML Map**: `save_html_map(flood_mask, metadata, "output.html")`
+- Interactive Leaflet.js map with OpenStreetMap/Satellite basemap
+- **Pixel-perfect flood overlay** (if Pillow/PIL for Python, FileIO/ImageIO for Julia)
+- PNG image embedded as base64 data URL
+- Falls back to rectangle approximation if packages missing
+- Info panel with simulation statistics
+- Layer control for basemap switching
+- Legend showing flooded areas
 - Viewable directly in browser
 
-**Julia**: Generates multiple output formats
-- **HTML Map**: `save_html_map(result, "output.html", metadata)`
-  - Interactive Leaflet.js map with OpenStreetMap/Satellite basemap
-  - **Pixel-perfect flood overlay** (if FileIO/ImageIO installed)
-  - PNG image embedded as base64 data URL
-  - Falls back to rectangle approximation if packages missing
-  - Info panel with simulation statistics
-  - Layer control for basemap switching
-  - Legend showing flooded areas
-- **GeoTIFF**: `save_flood_geotiff(result, "output.tif")`
-  - Open in QGIS/ArcGIS for professional GIS analysis
+**GeoTIFF**: `save_flood_geotiff(flood_mask, transform, metadata, "output.tif")`
+- Open in QGIS/ArcGIS for professional GIS analysis
+- LZW compression by default
+- Preserves georeferencing and CRS
+
+**Additional Julia-only:**
 - **GLMakie Plot**: `plot_results(result, background_map=true)`
   - Interactive plot preserving spatial coordinates
   - Optional map tile background with Tyler.jl
@@ -216,6 +242,16 @@ Edge seeding requires interior masking:
 - Coastal flooding uses morphological reconstruction from edges
 
 **Example: Northern Portugal (Caminha to Aveiro)**
+
+Python:
+```python
+# 150 km coastline split into ~12 tiles
+bounds = (-8.90, 40.55, -8.60, 41.87)
+tiles = create_tiles(bounds, 0.15, overlap=0.005)
+process_tiles("portugal_coast_wgs84.vrt", tiles, 3.8, 0.6, 1.13)
+```
+
+Julia:
 ```julia
 # 150 km coastline split into ~12 tiles
 bounds = (-8.90, 40.55, -8.60, 41.87)
