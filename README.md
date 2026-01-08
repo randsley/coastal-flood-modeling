@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![GitHub Stars](https://img.shields.io/github/stars/randsley/coastal-flood-modeling?style=social)](https://github.com/randsley/coastal-flood-modeling/stargazers)
 [![GitHub Issues](https://img.shields.io/github/issues/randsley/coastal-flood-modeling)](https://github.com/randsley/coastal-flood-modeling/issues)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.XXXXX-blue)](https://github.com/randsley/coastal-flood-modeling)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18186745-blue)](https://github.com/randsley/coastal-flood-modeling)
 
 High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território).
 
