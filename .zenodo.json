@@ -1,0 +1,58 @@
+{
+  "title": "Coastal Flood Simulation System for Portuguese Coastal Zones",
+  "description": "High-resolution coastal flood modeling using 50cm Digital Elevation Models (DEMs) from DGT. Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level rise scenarios. Features dual Python and Julia implementations with tiling support for large coastal regions.",
+  "license": "MIT",
+  "upload_type": "software",
+  "version": "1.0.0",
+  "keywords": [
+    "coastal flooding",
+    "flood modeling",
+    "GIS",
+    "digital elevation model",
+    "DEM",
+    "morphological reconstruction",
+    "sea level rise",
+    "Portugal",
+    "Julia",
+    "Python",
+    "rasterio",
+    "GDAL",
+    "hydrological connectivity",
+    "vertical datum",
+    "climate adaptation"
+  ],
+  "creators": [
+    {
+      "name": "Randsley, Nigel",
+      "affiliation": "",
+      "orcid": "0000-0001-5291-8938"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "DGT (Direção-Geral do Território)",
+      "type": "DataCurator",
+      "affiliation": "Portuguese National Mapping Agency"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/randsley/coastal-flood-modeling",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "communities": [
+    {
+      "identifier": "zenodo"
+    }
+  ],
+  "grants": [],
+  "references": [
+    "Direção-Geral do Território (DGT) - 50cm resolution Digital Elevation Models",
+    "scikit-image morphological reconstruction algorithms",
+    "ImageMorphology.jl for Julia implementation"
+  ],
+  "language": "eng",
+  "access_right": "open"
+}

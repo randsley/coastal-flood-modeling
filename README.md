@@ -252,8 +252,32 @@ If you encounter "required memory greater than system memory" errors:
 
 If using this system for research, please cite:
 
+```bibtex
+@software{randsley2026coastal,
+  author       = {Randsley, Nigel},
+  title        = {Coastal Flood Simulation System for Portuguese Coastal Zones},
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.XXXXX},
+  url          = {https://doi.org/10.5281/zenodo.XXXXX}
+}
+```
+
+**Note**: Replace `XXXXX` with the actual Zenodo DOI after creating your first release.
+
+### Setting up Zenodo DOI
+
+This repository is configured for Zenodo archiving. To get a permanent DOI:
+
+1. See the comprehensive guide: [`docs/ZENODO_SETUP.md`](docs/ZENODO_SETUP.md)
+2. Quick checklist: [`docs/ZENODO_CHECKLIST.md`](docs/ZENODO_CHECKLIST.md)
+3. Once published, update the DOI badge at the top of this README
+
+### Additional Citations
+
 - **DEM Data**: DGT (Direção-Geral do Território) - 50cm resolution Digital Elevation Models
-- **Morphological Flooding Algorithm**: Based on scikit-image morphological reconstruction
+- **Morphological Flooding Algorithm**: Based on scikit-image morphological reconstruction (Python) and ImageMorphology.jl (Julia)
 
 ## License
 
