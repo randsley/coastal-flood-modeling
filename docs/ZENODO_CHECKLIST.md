@@ -37,7 +37,20 @@ Quick reference for setting up Zenodo DOI for coastal-flood-modeling.
   doi: "10.5281/zenodo.XXXXX"
   ```
 - [ ] Commit and push these changes
-- [ ] (Optional) Join relevant Zenodo communities
+
+## Join Zenodo Communities (Highly Recommended)
+
+- [ ] Edit your Zenodo record
+- [ ] Add to priority communities:
+  - [ ] Climate and Weather
+  - [ ] Earth System Science
+  - [ ] Natural Hazards
+  - [ ] Coastal Research
+  - [ ] GIS and Geospatial
+  - [ ] Open Source Geospatial (OSGeo)
+  - [ ] Hydrology
+- [ ] Wait for community curator approvals (1-14 days)
+- [ ] See full guide: `docs/ZENODO_COMMUNITIES.md`
 
 ## Useful Links
 
