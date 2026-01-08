@@ -1,24 +1,47 @@
 cff-version: 1.2.0
-title: "Coastal Flood Simulation System"
+title: "Coastal Flood Simulation System for Portuguese Coastal Zones"
 message: "If you use this software, please cite it using the metadata from this file."
 type: software
 authors:
   - family-names: "Randsley"
     given-names: "Nigel"
     email: "nigel.randsley@protonmail.com"
+    orcid: "https://orcid.org/0000-0001-5291-8938"
+    # affiliation: "Your Institution"  # Add your affiliation if desired
 repository-code: "https://github.com/randsley/coastal-flood-modeling"
 url: "https://github.com/randsley/coastal-flood-modeling"
-abstract: "High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT. Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level scenarios."
+# doi: "10.5281/zenodo.XXXXX"  # Add your Zenodo DOI after first release
+abstract: "High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território). Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level rise scenarios. Features dual Python and Julia implementations with tiling support for large coastal regions."
 keywords:
   - coastal flooding
   - flood modeling
   - GIS
   - digital elevation model
+  - DEM
   - morphological reconstruction
   - sea level rise
+  - climate adaptation
+  - hydrological connectivity
+  - vertical datum
   - Portugal
   - Julia
   - Python
+  - rasterio
+  - GDAL
 license: MIT
 version: 1.0.0
 date-released: "2026-01-06"
+references:
+  - type: data
+    title: "Digital Elevation Model (50cm resolution)"
+    authors:
+      - name: "Direção-Geral do Território (DGT)"
+    abstract: "High-resolution Digital Elevation Models for Portugal"
+  - type: software
+    title: "scikit-image"
+    repository-code: "https://github.com/scikit-image/scikit-image"
+    abstract: "Image processing algorithms for morphological reconstruction"
+  - type: software
+    title: "ImageMorphology.jl"
+    repository-code: "https://github.com/JuliaImages/ImageMorphology.jl"
+    abstract: "Julia implementation of morphological reconstruction"
