@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![GitHub Stars](https://img.shields.io/github/stars/randsley/coastal-flood-modeling?style=social)](https://github.com/randsley/coastal-flood-modeling/stargazers)
 [![GitHub Issues](https://img.shields.io/github/issues/randsley/coastal-flood-modeling)](https://github.com/randsley/coastal-flood-modeling/issues)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18186745-blue)](https://github.com/randsley/coastal-flood-modeling)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18186745-blue)](https://doi.org/10.5281/zenodo.18186745)
 
 High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território).
 
@@ -259,20 +259,10 @@ If using this system for research, please cite:
   year         = 2026,
   publisher    = {Zenodo},
   version      = {1.0.0},
-  doi          = {10.5281/zenodo.XXXXX},
-  url          = {https://doi.org/10.5281/zenodo.XXXXX}
+  doi          = {10.5281/zenodo.18186745},
+  url          = {https://doi.org/10.5281/zenodo.18186745}
 }
 ```
-
-**Note**: Replace `XXXXX` with the actual Zenodo DOI after creating your first release.
-
-### Setting up Zenodo DOI
-
-This repository is configured for Zenodo archiving. To get a permanent DOI:
-
-1. See the comprehensive guide: [`docs/ZENODO_SETUP.md`](docs/ZENODO_SETUP.md)
-2. Quick checklist: [`docs/ZENODO_CHECKLIST.md`](docs/ZENODO_CHECKLIST.md)
-3. Once published, update the DOI badge at the top of this README
 
 ### Additional Citations
 

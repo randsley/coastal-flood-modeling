@@ -7,10 +7,9 @@ authors:
     given-names: "Nigel"
     email: "nigel.randsley@protonmail.com"
     orcid: "https://orcid.org/0000-0001-5291-8938"
-    # affiliation: "Your Institution"  # Add your affiliation if desired
 repository-code: "https://github.com/randsley/coastal-flood-modeling"
 url: "https://github.com/randsley/coastal-flood-modeling"
-# doi: "10.5281/zenodo.XXXXX"  # Add your Zenodo DOI after first release
+doi: "10.5281/zenodo.18186745"
 abstract: "High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território). Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level rise scenarios. Features dual Python and Julia implementations with tiling support for large coastal regions."
 keywords:
   - coastal flooding
@@ -45,3 +44,35 @@ references:
     title: "ImageMorphology.jl"
     repository-code: "https://github.com/JuliaImages/ImageMorphology.jl"
     abstract: "Julia implementation of morphological reconstruction"
+  - type: article
+    title: "Coastal Flooding Hazards in Northern Portugal: A Practical Large-Scale Evaluation of Total Water Levels and Swash Regimes"
+    authors:
+      - family-names: "Carneiro-Barros"
+        given-names: "Jose Eduardo"
+      - family-names: "Majidi"
+        given-names: "Ajab Gul"
+      - family-names: "Plomaritis"
+        given-names: "Theocharis"
+      - family-names: "Fazeres-Ferradosa"
+        given-names: "Tiago"
+      - family-names: "Rosa-Santos"
+        given-names: "Paulo"
+      - family-names: "Taveira-Pinto"
+        given-names: "Francisco"
+    journal: "Water"
+    volume: 17
+    issue: 10
+    year: 2025
+    doi: "10.3390/w17101478"
+    abstract: "Regional-scale assessment of total water levels and swash regimes over 120 km of the northern Portuguese coast (Caminha to Barrinha de Esmoriz), using DGT LiDAR DTM, SWAN wave model, empirical wave runup formulas, and LSTM-reconstructed storm surge. Validates TWL thresholds against APA hazard event records (2018–2024)."
+  - type: article
+    title: "Sea level much higher than assumed in most coastal hazard assessments"
+    authors:
+      - family-names: "Seeger"
+        given-names: "Katharina"
+      - family-names: "Minderhoud"
+        given-names: "Philip S. J."
+    journal: "Nature"
+    year: 2026
+    doi: "10.1038/s41586-026-10196-1"
+    abstract: "Shows that more than 99% of evaluated coastal hazard impact assessments handle sea-level and land elevation data inadequately. Measured coastal sea level is on average 0.24–0.27 m higher than assumed in most assessments (based on geoid models), with regional differences exceeding 1 m in parts of the Global South. Correcting for this suggests 31–37% more land and 48–68% more people (77–132 million) would fall below sea level under a hypothetical 1 m of relative sea-level rise."

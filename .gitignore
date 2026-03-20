@@ -1,3 +1,6 @@
+# Documents folder (local working documents, not for version control)
+docs/
+
 # Large DEM Data Files (too large for GitHub)
 DEM/
 DEM2m/
