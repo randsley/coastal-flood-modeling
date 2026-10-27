@@ -344,8 +344,9 @@ function create_index_map(tiles::Vector{Tile}, output_file::String)
         <div id="map"></div>
         <script>
             var map = L.map('map').setView([$(center_lat), $(center_lon)], 10);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, &copy; OpenStreetMap contributors',
+                maxZoom: 19
             }).addTo(map);
 
             $(tile_html)

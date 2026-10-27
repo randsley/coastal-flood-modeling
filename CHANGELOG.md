@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Basemaps in the HTML maps showed "Access blocked" tiles.** The maps
+  requested `{s}.tile.openstreetmap.org`, a deprecated form that OpenStreetMap's
+  volunteer-run servers treat as non-compliant with their tile usage policy.
+  They answer such a client with HTTP 200 and an "Access blocked" graphic
+  rendered *into the tile*, so the map filled with identical warning squares
+  rather than failing visibly. The street basemap is now Esri World Street Map
+  and the satellite basemap Esri World Imagery, both keyless and published for
+  this use. (CARTO's basemaps now require an API key, so they are not an
+  alternative.) The satellite layer previously used an undocumented Google
+  `mt1.google.com/vt` endpoint that is not licensed for this; the legacy
+  `Simul.py` used it too and has been changed as well.
+
 ### Planned
 - Example Jupyter/Pluto notebooks with sample data
 - Performance benchmarks documentation
