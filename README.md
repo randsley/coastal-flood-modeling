@@ -503,11 +503,17 @@ If using this system for research, please cite:
   title        = {Coastal Flood Simulation System for Portuguese Coastal Zones},
   year         = 2026,
   publisher    = {Zenodo},
-  version      = {2.0.0},
-  doi          = {10.5281/zenodo.23707016},
-  url          = {https://doi.org/10.5281/zenodo.23707016}
+  version      = {2.0.1},
+  doi          = {10.5281/zenodo.18186744},
+  url          = {https://doi.org/10.5281/zenodo.18186744}
 }
 ```
+
+This is the **concept DOI**, which always resolves to the newest release. To
+cite a specific version instead, use that version's own DOI from the
+[Zenodo record](https://doi.org/10.5281/zenodo.18186744) — for example
+`10.5281/zenodo.23707016` for 2.0.0. Note that figures from 1.0.0 are gross
+extents and are not comparable with later releases.
 
 ### Additional Citations
 
