@@ -1034,16 +1034,23 @@ function save_html_map(raster_mask, output_file::String, metadata::Dict;
             // Initialize map
             var map = L.map('map').setView([$(center_lat), $(center_lon)], $(zoom));
 
-            // Add OpenStreetMap tiles (default)
-            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            // Street basemap (default). Esri's World Street Map is used
+            // rather than tile.openstreetmap.org, whose volunteer-run servers
+            // enforce a tile usage policy: to a client they consider
+            // non-compliant they return HTTP 200 with an "Access blocked"
+            // image rendered into the tile itself, so the map silently fills
+            // with warning squares. Esri publishes these endpoints for general
+            // use and needs no API key. (CARTO's now require one.)
+            var streets = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, &copy; OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
 
-            // Add satellite layer option
-            var satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-                attribution: 'Google Satellite',
-                maxZoom: 20
+            // Satellite basemap: Esri World Imagery, which publishes this
+            // endpoint for exactly this use.
+            var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics',
+                maxZoom: 19
             });
 
             $(overlay_code)
@@ -1087,7 +1094,7 @@ function save_html_map(raster_mask, output_file::String, metadata::Dict;
 
             // Layer control
             var baseMaps = {
-                "OpenStreetMap": osm,
+                "Streets": streets,
                 "Satellite": satellite
             };
             var overlayMaps = {

@@ -55,10 +55,13 @@ def run_simulation_on_vrt(vrt_path, tide_zh, surge, slr, bounds):
     
     m = folium.Map(location=[center_lat, center_lon], zoom_start=12, tiles=None)
     
+    # Esri World Imagery publishes this endpoint for this use; the Google
+    # vt endpoint previously used here is undocumented and not licensed for it.
     folium.TileLayer(
-        tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-        attr='Google',
-        name='Google Satellite',
+        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/'
+              'World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr='Imagery &copy; Esri, Maxar, Earthstar Geographics',
+        name='Satellite',
         overlay=False, control=True
     ).add_to(m)
 
