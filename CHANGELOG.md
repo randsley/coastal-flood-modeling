@@ -7,7 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned
+- Example Jupyter/Pluto notebooks with sample data
+- Performance benchmarks documentation
+- Additional vertical datum conversions for other Portuguese regions
+- Docker container for reproducible environment
+
+## [2.0.1] - 2026-10-27
+
 ### Fixed
+- **The DOI badge and citation pointed at v1.0.0.**
+  `10.5281/zenodo.18186745` is v1.0.0's *version* DOI, not the concept DOI, so
+  the badge and `CITATION.cff` sent readers to the 1.0.0 snapshot and its
+  superseded gross-extent figures — and would have gone stale again at every
+  release. The badge, `CITATION.cff` and the README's BibTeX now all use the
+  concept DOI `10.5281/zenodo.18186744`, which always resolves to the newest
+  release. Version DOIs are documented for anyone who needs to pin one.
+- **The README's Example Results images were dead links.** `docs/` was removed
+  from version control and gitignored, and the images also predated 2.0.0, so
+  they showed the old binary flood mask. Replaced with a current screenshot of
+  the classified output; `docs/images/*.png` is now tracked.
 - **Basemaps in the HTML maps showed "Access blocked" tiles.** The maps
   requested `{s}.tile.openstreetmap.org`, a deprecated form that OpenStreetMap's
   volunteer-run servers treat as non-compliant with their tile usage policy.
@@ -19,12 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   alternative.) The satellite layer previously used an undocumented Google
   `mt1.google.com/vt` endpoint that is not licensed for this; the legacy
   `Simul.py` used it too and has been changed as well.
-
-### Planned
-- Example Jupyter/Pluto notebooks with sample data
-- Performance benchmarks documentation
-- Additional vertical datum conversions for other Portuguese regions
-- Docker container for reproducible environment
 
 ## [2.0.0] - 2026-10-27
 
