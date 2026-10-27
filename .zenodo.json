@@ -3,7 +3,7 @@
   "description": "High-resolution coastal flood modeling using 50cm Digital Elevation Models (DEMs) from DGT. Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level rise scenarios. Features dual Python and Julia implementations with tiling support for large coastal regions.",
   "license": "MIT",
   "upload_type": "software",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "keywords": [
     "coastal flooding",
     "flood modeling",
