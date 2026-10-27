@@ -1,5 +1,8 @@
 # Documents folder (local working documents, not for version control)
-docs/
+docs/*
+!docs/images/
+docs/images/*
+!docs/images/*.png
 
 # Large DEM Data Files (too large for GitHub)
 DEM/
@@ -58,3 +61,6 @@ build/
 
 # Local AI assistant guidance, kept out of the published repo
 CLAUDE.md
+
+# ...but README illustrations are tracked (must come after the *.png rule above)
+!docs/images/*.png

@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![GitHub Stars](https://img.shields.io/github/stars/randsley/coastal-flood-modeling?style=social)](https://github.com/randsley/coastal-flood-modeling/stargazers)
 [![GitHub Issues](https://img.shields.io/github/issues/randsley/coastal-flood-modeling)](https://github.com/randsley/coastal-flood-modeling/issues)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18186745-blue)](https://doi.org/10.5281/zenodo.18186745)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18186744-blue)](https://doi.org/10.5281/zenodo.18186744)
 
 High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território).
 
@@ -321,11 +321,14 @@ The system automatically converts pixel dimensions from degrees to meters for ac
 
 ## Example Results
 
-![Example HTML Map Output](docs/example_html_map.png)
-*Interactive HTML map output (Leaflet.js with pixel-accurate overlay)*
+![Espinho flood map](docs/images/espinho_flood_map.png)
+*`espinho_flood_result.html` at native 50 cm: **red** is newly inundated land,
+**blue** is water already there today. The straight-edged blue rectangles
+offshore are the limit of DGT tile coverage, not flooding — see
+[Rectangular blocks along the coast](#rectangular-blocks-along-the-coast).*
 
-![Example QGIS Output](docs/example_qgis_view.png)
-*GeoTIFF output visualized in QGIS*
+The same run also writes `espinho_flood_result.tif`, a classified GeoTIFF
+(`0` dry, `1` newly inundated land, `2` baseline water) for QGIS or ArcGIS.
 
 **Scenario**: HAT (3.8 m ZH) + 50-year surge (0.6 m) + 2100 SLR (1.13 m)
 = 5.53 m ZH, i.e. a threshold of **3.53 m NMM** after the 2.00 m datum offset.
@@ -501,8 +504,8 @@ If using this system for research, please cite:
   year         = 2026,
   publisher    = {Zenodo},
   version      = {2.0.0},
-  doi          = {10.5281/zenodo.18186745},
-  url          = {https://doi.org/10.5281/zenodo.18186745}
+  doi          = {10.5281/zenodo.23707016},
+  url          = {https://doi.org/10.5281/zenodo.23707016}
 }
 ```
 

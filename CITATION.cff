@@ -9,7 +9,7 @@ authors:
     orcid: "https://orcid.org/0000-0001-5291-8938"
 repository-code: "https://github.com/randsley/coastal-flood-modeling"
 url: "https://github.com/randsley/coastal-flood-modeling"
-doi: "10.5281/zenodo.18186745"
+doi: "10.5281/zenodo.18186744"
 abstract: "High-resolution coastal flood modeling for Portuguese coastal zones using 50cm Digital Elevation Models (DEMs) from DGT (Direção-Geral do Território). Implements connected morphological flooding algorithms to simulate coastal inundation under various sea level rise scenarios. Features dual Python and Julia implementations with tiling support for large coastal regions."
 keywords:
   - coastal flooding
