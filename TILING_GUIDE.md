@@ -131,11 +131,26 @@ Open `merged_flood.vrt` in QGIS to view the complete mosaic.
 
 ### 4. Calculate Total Statistics
 
+`process_tiles` returns `(results, totals)`. Use `totals` — it is computed from
+each tile's non-overlapping core, so every pixel is counted exactly once:
+
 ```julia
-# Sum flooded areas across tiles
-total_area_km2 = sum(r[2]["flooded_area_km2"] for r in results if r[2] !== nothing)
-println("Total flooded area: $(round(total_area_km2, digits=2)) km²")
+results, totals = process_tiles(vrt_path, tiles, 3.8, 0.6, 1.13;
+                                output_dir="tiles_output_julia", downsample=4)
+
+println("Newly inundated land: $(round(totals["new_km2"], digits=3)) km²")
+println("Baseline water today: $(round(totals["baseline_km2"], digits=3)) km²")
+println("Gross below water level: $(round(totals["gross_km2"], digits=3)) km²")
 ```
+
+> **Do not sum the per-tile figures of the padded extents.** Tiles are padded by
+> `overlap` on each interior side, so neighbours share a strip twice the overlap
+> wide; summing them counts every strip twice. `totals["naive_gross_km2"]` is
+> kept only to show how large that error is.
+
+The headline figure is `new_km2`: land that is dry today and floods under the
+scenario. `gross_km2` includes the sea and the estuaries and is not land at
+risk.
 
 ## Parallel Processing (Advanced)
 
@@ -193,11 +208,18 @@ Tile 5: 0 flooded pixels (ocean only) ← Expected!
 If you see linear artifacts at tile boundaries:
 - Increase overlap from 0.005° to 0.01°
 - Ensure tiles are processed with same datum_offset
+- Check that `global_seed_downsample` is not `nothing`/`None`. Without the
+  coarse whole-region pass, every tile border seeds water, which floods closed
+  basins the border cuts through and leaves a rectangular stain on the map.
 
 ### Inconsistent Statistics
-When summing areas, account for overlap:
-- Don't multiply (tiles × area) - overlap causes double-counting
-- Instead: Sum individual tile results (already correct)
+Use the `totals` returned by `process_tiles`:
+- Don't multiply (tiles × area) - that is meaningless
+- Don't sum the padded tiles either - neighbours share a strip twice the
+  overlap wide, so every strip is counted twice. `totals` is computed from the
+  non-overlapping cores and counts each pixel once.
+- Compare `totals["gross_km2"]` with `totals["naive_gross_km2"]` to see how
+  large the double-counting error would have been for your tiling.
 
 ## Example: Northern Portugal Coast
 
@@ -206,18 +228,20 @@ When summing areas, account for overlap:
 bounds = (-8.90, 40.55, -8.60, 41.87)  # 150 km coastline
 tiles = create_tiles(bounds, 0.15, overlap=0.005)  # ~12 tiles
 
-results = process_tiles(
+results, totals = process_tiles(
     "portugal_coast_wgs84.vrt",
-    tiles, 3.8, 0.6, 1.13,
-    output_dir="north_portugal_tiles"
+    tiles, 3.8, 0.6, 1.13;
+    output_dir="north_portugal_tiles",
+    downsample=4,   # ~2 m; the 50 cm VRT does not fit in RAM over this region
 )
 
 # Expected output:
-# - 12 GeoTIFFs (one per tile)
-# - 12 HTML maps
+# - one GeoTIFF per tile, cropped to its non-overlapping core
+# - one HTML map per tile
 # - Processing time: ~30-60 minutes
 # - Total size: ~100-500 MB
-# - Total flooded area: ~50-100 km² (scenario-dependent)
+# - totals["new_km2"]: newly inundated land, the headline figure
+# - totals["gross_km2"]: includes the sea, not land at risk
 ```
 
 ## Comparison: Single vs Tiled

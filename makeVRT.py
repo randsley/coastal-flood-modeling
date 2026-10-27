@@ -3,7 +3,7 @@ from osgeo import gdal
 
 # 1. SETUP PATHS
 # Update this path to where your files are in Drive
-input_folder = './DEM2m' 
+input_folder = './DEM50cm' 
 output_vrt = 'portugal_coast_mosaic.vrt'
 output_reprojected = 'portugal_coast_wgs84.vrt'
 

@@ -1,30 +1,49 @@
 #!/usr/bin/env julia
-# Regenerate HTML maps from existing GeoTIFF files with corrected PNG encoding
+# Regenerate the per-tile HTML maps for an existing tiled run.
+#
+# Useful after changing the map template, or to repair HTML written before the
+# UTF-8 fix (Python used to open these files in the platform's default
+# encoding, which mangled "km²" and "×" on Windows).
+#
+# The simulation is re-run per tile because the HTML embeds the flood classes
+# as a PNG; the tile GeoTIFF is only used to decide which tiles exist.
 
-include("simul_flood.jl")
-
-println("="^70)
-println("REGENERATING HTML MAPS FROM GEOTIFFS")
-println("="^70)
-
-vrt_file = "portugal_coast_wgs84.vrt"
-output_dir = "tiles_output"
-
-# Read tile bounds from the tiled script
-caminha_to_aveiro = (-8.90, 40.55, -8.60, 41.87)
-
-# Import the create_tiles function by including the tiled script
 include("simul_flood_tiled.jl")
 
-# Recreate tiles (must match original run)
-tiles = create_tiles(caminha_to_aveiro, 0.15, overlap=0.005)
+println("="^70)
+println("REGENERATING HTML MAPS FOR AN EXISTING TILED RUN")
+println("="^70)
 
-println("\nRegenerating $(length(tiles)) HTML maps...")
-println()
+const VRT_FILE = "portugal_coast_wgs84.vrt"
+const OUTPUT_DIR = get(ENV, "FLOOD_TILES_DIR", "tiles_output_julia")
 
-for (idx, tile_bounds) in enumerate(tiles)
-    tif_file = joinpath(output_dir, "tile_$(lpad(idx, 3, '0')).tif")
-    html_file = joinpath(output_dir, "tile_$(lpad(idx, 3, '0')).html")
+# These must match the run that produced the GeoTIFFs.
+const CAMINHA_TO_AVEIRO = (-8.90, 40.55, -8.60, 41.87)
+const TILE_SIZE_DEG = 0.15
+const OVERLAP_DEG = 0.005
+const TIDE_ZH = 3.8
+const SURGE = 0.6
+const SLR = 1.13
+const DOWNSAMPLE = 4
+
+isfile(VRT_FILE) || error("VRT file not found: $VRT_FILE\nRun makeVRT.py first.")
+isdir(OUTPUT_DIR) || error("Output directory not found: $OUTPUT_DIR")
+
+tiles = create_tiles(CAMINHA_TO_AVEIRO, TILE_SIZE_DEG, overlap=OVERLAP_DEG)
+
+levels = compute_thresholds(TIDE_ZH, SURGE, SLR)
+global_seed = build_global_seed_mask(
+    VRT_FILE, CAMINHA_TO_AVEIRO,
+    levels.flood_threshold, levels.baseline_threshold)
+
+println("\nRegenerating up to $(length(tiles)) HTML maps in $OUTPUT_DIR...\n")
+
+regenerated = 0
+
+for tile in tiles
+    idx = tile.index
+    tif_file = joinpath(OUTPUT_DIR, "tile_$(lpad(idx, 3, '0')).tif")
+    html_file = joinpath(OUTPUT_DIR, "tile_$(lpad(idx, 3, '0')).html")
 
     if !isfile(tif_file)
         println("[$idx/$(length(tiles))] Skipping tile $idx (GeoTIFF not found)")
@@ -34,15 +53,24 @@ for (idx, tile_bounds) in enumerate(tiles)
     println("[$idx/$(length(tiles))] Regenerating HTML for tile $idx...")
 
     try
-        # Re-run simulation to get the result raster and metadata
-        result, transform, metadata = run_simulation_on_vrt(
-            vrt_file, 3.8, 0.6, 1.13, tile_bounds
-        )
+        result, gt, metadata = run_simulation_on_vrt(
+            VRT_FILE, TIDE_ZH, SURGE, SLR, tile.bounds;
+            downsample=DOWNSAMPLE, global_seed=global_seed, verbose=false)
 
-        # Regenerate HTML with pixel-perfect PNG overlay
-        save_html_map(result, html_file, metadata)
+        # The saved GeoTIFFs are cropped to the core, so crop here too.
+        mask_core, gt_core, bounds_core = crop_to_core(
+            UInt8.(Array(result)), gt, tile.core)
 
-        println("  ✓ Regenerated: $html_file ($(round(metadata["flooded_area_km2"], digits=3)) km²)")
+        meta_core = copy(metadata)
+        merge!(meta_core, summarize_mask(mask_core, gt_core, bounds_core))
+        meta_core["geotransform"] = gt_core
+
+        save_html_map(classified_raster(mask_core, gt_core; crs=metadata["crs"]),
+                      html_file, meta_core)
+
+        println("  ✓ Regenerated: $html_file " *
+                "($(round(meta_core["flooded_area_new_km2"], digits=3)) km² new)")
+        global regenerated += 1
 
     catch e
         @warn "Failed to regenerate tile $idx: $e"
@@ -51,8 +79,9 @@ end
 
 println()
 println("="^70)
-println("HTML REGENERATION COMPLETE")
+println("HTML REGENERATION COMPLETE: $regenerated file(s)")
 println("="^70)
-println("HTML maps now show pixel-accurate flood extent overlays")
-println("Open any tiles_output/tile_*.html file in your browser")
+println("The maps show newly inundated land in red and present-day water in blue,")
+println("and are written as UTF-8, matching the charset they declare.")
+println("Open any $OUTPUT_DIR/tile_*.html file in your browser")
 println("="^70)

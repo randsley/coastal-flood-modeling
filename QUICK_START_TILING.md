@@ -5,15 +5,21 @@
 ### Step 1: Run the Tiled Simulation
 
 ```bash
-julia simul_flood_tiled.jl
+julia simul_flood_tiled.jl     # writes tiles_output_julia/
+python Simul_tiled.py          # writes tiles_output/
 ```
 
 That's it! The script will automatically:
-- ✅ Split the region into 12 manageable tiles
-- ✅ Process each tile with flood simulation
-- ✅ Save GeoTIFFs and HTML maps
+- ✅ Split the region into manageable tiles (18 at the default 0.15°)
+- ✅ Run one coarse whole-region connectivity pass, so tile borders only admit water where water really reaches
+- ✅ Process each tile with flood simulation, then crop it to its non-overlapping core
+- ✅ Save classified GeoTIFFs (0 dry, 1 newly inundated land, 2 baseline water) and HTML maps
 - ✅ Create a merged VRT for QGIS
-- ✅ Calculate total statistics
+- ✅ Report totals with every pixel counted once
+
+The headline number is **newly inundated land**: the scenario extent minus the
+water that is already there today. The gross extent includes the Atlantic and
+the Ria de Aveiro and is not land at risk.
 
 ### Step 2: View Results
 
@@ -50,22 +56,32 @@ my_bounds = (min_lon, min_lat, max_lon, max_lat)
 # Adjust tile size if needed (default: 0.15° ≈ 16.5 km)
 tiles = create_tiles(my_bounds, 0.15, overlap=0.005)
 
-# Change scenario parameters
-process_tiles(vrt_file, tiles,
+# Change scenario parameters. `results, totals` - use `totals`, not a sum
+# over the per-tile figures.
+results, totals = process_tiles(vrt_file, tiles,
     4.2,   # Different tide level
     0.8,   # Different surge
-    1.5    # Different SLR
+    1.5;   # Different SLR
+    downsample=4,            # ~2 m from the 50 cm VRT
+    baseline_tide_zh=3.8,    # defaults to the scenario tide
 )
+println(totals["new_km2"])   # newly inundated land
 ```
 
 ## Quick Reference Table
 
+At `downsample=4` (~2 m from the 50 cm VRT):
+
 | Region Size | Tile Size | Number of Tiles | Memory/Tile | Total Time |
 |-------------|-----------|-----------------|-------------|------------|
-| 50 km coast | 0.15° | ~3 tiles | 1-2 GB | ~10 min |
-| 100 km coast | 0.15° | ~6 tiles | 1-2 GB | ~20 min |
-| 150 km coast | 0.15° | ~12 tiles | 1-2 GB | ~40 min |
-| 200 km coast | 0.15° | ~20 tiles | 1-2 GB | ~60 min |
+| 50 km coast | 0.15° | ~6 tiles | ~1 GB | ~6 min |
+| 100 km coast | 0.15° | ~12 tiles | ~1 GB | ~12 min |
+| 150 km coast | 0.15° | 18 tiles | ~1 GB | ~17 min |
+| 200 km coast | 0.15° | ~24 tiles | ~1 GB | ~25 min |
+
+Add a few minutes for the one-off coarse whole-region connectivity pass. At
+native 50 cm (`downsample=1`) a 0.15° tile is ~1.1 × 10⁹ pixels and needs well
+over 10 GB, so plan on a coarser grid or smaller tiles.
 
 ## Common Regions (Pre-configured)
 
@@ -93,10 +109,25 @@ northwest_coast = (-9.40, 39.35, -8.60, 41.90)
 tiles = create_tiles(bounds, 0.10, overlap=0.005)  # 11 km instead of 16.5 km
 ```
 
+**Problem**: "Out of memory" even with small tiles
+```julia
+# Solution: read a coarser grid. 4 means every 4th pixel, so 1/16 the memory.
+process_tiles(..., downsample=4)
+```
+
 **Problem**: Linear artifacts at tile boundaries
 ```julia
-# Solution: Increase overlap
+# Solution: increase overlap, and keep the coarse whole-region seeding pass on
 tiles = create_tiles(bounds, 0.15, overlap=0.01)  # 1 km instead of 500m
+process_tiles(..., global_seed_downsample=16)     # the default; `nothing` disables
+```
+
+**Problem**: Rectangular patches of "flood" inland
+```julia
+# Cause: tile borders seeding closed basins they cut through.
+# Solution: leave global_seed_downsample at its default (16), or lower it for
+# a finer connectivity pass.
+process_tiles(..., global_seed_downsample=8)
 ```
 
 **Problem**: Takes too long
@@ -119,16 +150,19 @@ After running the tiled simulation:
 .
 ├── simul_flood_tiled.jl          # Main script
 ├── tile_index.html                # Tile grid visualization
-├── merged_flood_north_portugal.vrt # Merged mosaic
+├── merged_flood_north_portugal.vrt # Merged mosaic (no overlapping pixels)
 └── tiles_output/
-    ├── tile_001.tif               # GeoTIFF (NW corner)
+    ├── tile_001.tif               # GeoTIFF, cropped to its core
     ├── tile_001.html              # Interactive map
     ├── tile_002.tif
     ├── tile_002.html
     ├── ...
-    ├── tile_012.tif               # GeoTIFF (SE corner)
-    └── tile_012.html              # Interactive map
+    ├── tile_018.tif
+    └── tile_018.html
 ```
+
+Tiles are numbered from the south-west corner of the bounding box, west to east
+within a row, then south to north.
 
 ## Performance Tips
 
