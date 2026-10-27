@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Planned
+- Example Jupyter/Pluto notebooks with sample data
+- Performance benchmarks documentation
+- Additional vertical datum conversions for other Portuguese regions
+- Docker container for reproducible environment
+
+## [2.0.0] - 2026-10-27
+
+### Breaking
+- The headline area figure changed meaning. `flooded_area_km2` is gone;
+  use `flooded_area_new_km2` (newly inundated land), with
+  `baseline_area_km2` and `flooded_area_gross_km2` alongside it. Figures
+  published from 1.0.0 are gross extents and are not comparable.
+- Output GeoTIFFs are classified, not binary: `0` dry land, `1` newly
+  inundated land, `2` baseline water. Code that treated any non-zero pixel
+  as "flooded" now counts existing water as well.
+- `process_tiles` returns `(results, totals)` rather than `results`. Use
+  `totals`; summing the per-tile figures double-counts the overlaps.
+
 ### Fixed
 - **Flooded area counted water that was already water.** The DGT DEM includes
   the sea surface, so edge-seeded reconstruction classified the Atlantic and the
@@ -60,12 +79,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `merge_tiles_to_vrt` now writes the mosaic VRT itself when the GDAL Python
   bindings are unavailable; the Julia side uses ArchGDAL rather than requiring
   `gdalbuildvrt` on PATH.
-
-### Planned
-- Example Jupyter/Pluto notebooks with sample data
-- Performance benchmarks documentation
-- Additional vertical datum conversions for other Portuguese regions
-- Docker container for reproducible environment
 
 ## [1.0.0] - 2026-01-06
 

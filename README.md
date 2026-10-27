@@ -500,7 +500,7 @@ If using this system for research, please cite:
   title        = {Coastal Flood Simulation System for Portuguese Coastal Zones},
   year         = 2026,
   publisher    = {Zenodo},
-  version      = {1.0.0},
+  version      = {2.0.0},
   doi          = {10.5281/zenodo.18186745},
   url          = {https://doi.org/10.5281/zenodo.18186745}
 }
