@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Flooded area counted water that was already water.** The DGT DEM includes
+  the sea surface, so edge-seeded reconstruction classified the Atlantic and the
+  Ria de Aveiro as "flooded". A second pass at the present-day highest
+  astronomical tide now establishes a baseline water mask, and the headline
+  figure is `newly inundated land = scenario AND NOT baseline`. Both
+  implementations report `flooded_area_new_km2`, `baseline_area_km2` and
+  `flooded_area_gross_km2`; the ambiguous `flooded_area_km2` key is gone.
+  Previously published totals for the Caminha–Aveiro region were gross figures
+  and overstated land at risk by roughly a factor of seven.
+- **Double counting in tiled totals.** Tiles are padded by `overlap` on each
+  interior side, so neighbours shared a strip twice the overlap wide, and
+  `process_tiles` summed the padded tiles. Tiles now carry a non-overlapping
+  `core`; outputs are cropped to it and totals are computed from it, so each
+  pixel is counted exactly once. `process_tiles` returns `(results, totals)`.
+- **False flooding from tile edges.** A tile border is not coastline, but it
+  was seeded as though it were, flooding closed basins it happened to cut
+  through. A coarse whole-region connectivity pass
+  (`global_seed_downsample`, default 16) now decides where a tile border may
+  admit water. A tiled run reproduces a single-pass run pixel for pixel.
+- **Nothing flooded where the sea does not reach the edge of the window.**
+  Water was only ever seeded from the border ring of the array, but the DGT
+  mosaic is a coastal strip whose seaward limit is a stair-step of 1 km tiles,
+  so over most of the region the sea lies *inside* the window and simply stops
+  where the survey stops. Seventeen of the eighteen regional tiles came back
+  empty. Low ground meeting the outside of the DEM coverage is now a water
+  source as well (`seed_from_nodata`, on by default). NoData enclosed by
+  coverage — a missing tile — is still not a source, since nothing is known to
+  connect through it.
+- **HTML written in the platform encoding.** Python opened the map files
+  without `encoding='utf-8'`, which on Windows is cp1252, so `km²` and `×`
+  were mangled in documents declaring UTF-8.
+- **Zero-width trailing tiles.** Rounding in `create_tiles` could ask for one
+  row or column more than the extent needed; such slivers are now dropped.
+- **Image overlays misplaced when the window ran past the DEM.** The HTML map
+  was positioned on the requested bounds rather than the extent actually read.
+
+### Added
+- `downsample` parameter on the read path, issuing the same windowed,
+  decimated GDAL call in both languages, so Python and Julia read identical
+  pixels (verified byte-identical on Espinho at 50 cm).
+- Optional land/water polygon baseline via `water_mask_path` (GeoPackage or
+  shapefile); never required.
+- Classified output: GeoTIFF band values `0` dry land, `1` newly inundated
+  land, `2` baseline water, with the areas written as raster tags. HTML maps
+  draw the two classes separately with a matching legend.
+- Test suites on a synthetic DEM: `test_flood_simulation.py` and
+  `test_flood_simulation.jl`.
+- `check_dem_coverage.py`, which shows that the rectangular blocks along the
+  coast are the limit of DGT tile coverage rather than a NoData-handling bug.
+- `merge_tiles_to_vrt` now writes the mosaic VRT itself when the GDAL Python
+  bindings are unavailable; the Julia side uses ArchGDAL rather than requiring
+  `gdalbuildvrt` on PATH.
+
 ### Planned
 - Example Jupyter/Pluto notebooks with sample data
 - Performance benchmarks documentation

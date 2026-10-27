@@ -1,5 +1,12 @@
 # Python Version Update Summary
 
+> **Historical note.** This document records the parity work done in January 2026.
+> Parts of it are now out of date: `run_simulation_on_vrt` returns a *classified*
+> mask (0 dry, 1 newly inundated land, 2 baseline water), the metadata key
+> `flooded_area_km2` has been replaced by `flooded_area_new_km2`,
+> `baseline_area_km2` and `flooded_area_gross_km2`, and `process_tiles` returns
+> `(results, totals)`. See the CHANGELOG and README for the current behaviour.
+
 ## Overview
 The Python implementation (`Simul_corrected.py`) has been updated to achieve **full feature parity** with the Julia version. Both implementations now offer identical capabilities for coastal flood simulation.
 

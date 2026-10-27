@@ -55,3 +55,6 @@ build/
 # Backup files
 *.bak
 *.backup
+
+# Local AI assistant guidance, kept out of the published repo
+CLAUDE.md
